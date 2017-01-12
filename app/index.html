@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
     <link rel="stylesheet" href="styles/leaflet-vector-markers.css">
 
+    <link rel="stylesheet" href="https://opensource.keycdn.com/fontawesome/4.7.0/font-awesome.min.css" integrity="sha384-dNpIIXE8U05kAbPhy3G1cz+yZmTzA6CY8Vg/u2L9xRnHjJiAK76m2BIEaSEV+/aU" crossorigin="anonymous">
+
     <style media="screen">
         #mapid {
             height: 360px;
@@ -19,6 +21,7 @@
 
 <body>
     <div id="mapid"></div>
+
     <script type="text/javascript">
         var mymap = L.map('mapid').setView([39.9525840, -75.1652220], 8);
 
@@ -37,27 +40,12 @@
             .then(function(data) {
                 geojsonFeatures = JSON.parse(data);
                 L.geoJSON(geojsonFeatures, {
-                    style: function(feature) {
-                      return {
-                        color: feature.properties['marker-color']
-                      };
-                    },
                     pointToLayer: function(feature, latlng) {
-                      let newRadius = 7;
-                      switch (feature.properties['marker-size']) {
-                        case 'large':
-                          newRadius = 13;
-                          break;
-                          case 'medium':
-                            newRadius = 10;
-                            break;
-                        default:
-                        newRadius = 7;
-                      }
-                      return new L.CircleMarker(latlng, {
-                        radius: newRadius,
-                        fillOpacity: 0.5
+                      var newMarker = L.VectorMarkers.icon({
+                        icon: feature.properties['marker-symbol'],
+                        markerColor: feature.properties['marker-color']
                       });
+                      return new L.marker(latlng, {icon: newMarker});
                     },
                     onEachFeature: function(feature, layer) {
                       layer.bindPopup(`<strong><a href="${feature.properties.url}" target="_blank">${feature.properties.name}</a></strong><br/>${feature.properties.address}`);
