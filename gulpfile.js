@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var useref = require('gulp-useref');
 var gulpIf = require('gulp-if');
+var del = require('del');
 
 
 gulp.task('useref', function() {
@@ -15,4 +16,8 @@ gulp.task('fonts', function() {
       'node_modules/font-awesome/fonts/fontawesome-webfont.*'
     ])
     .pipe(gulp.dest('dist/fonts/'));
+});
+
+gulp.task('clean:dist', function() {
+  return del.sync('dist');
 });
