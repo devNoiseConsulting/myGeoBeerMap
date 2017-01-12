@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>geoBeer Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>myGeoBeerMap</title>
     <!--build:css css/main.css -->
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="../node_modules/leaflet/dist/leaflet.css" />
@@ -14,19 +16,52 @@
 </head>
 
 <body>
-    <div id="mapid"></div>
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <a class="navbar-brand" href="#">myGeoBeerMap</a>
 
-    <button id="remove">Remove</button>
-    <button id="all">All</button>
-    <button id="visited">Visted</button>
-    <button id="visiting">Visting Soon</button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/devNoiseConsulting/myGeoBeerMap">GitHub Repo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/devNoiseConsulting/geoBeer">geoBeer Repo</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-    <form class="brewery-search">
-    <input id="search" name="brewery" type="text" />
-    <input type="submit" value="Filter" />
-    </form>
+    <div id="mapid" class="container-fluid"></div>
 
+    <div class="container pt-3">
+        <div class="row pb-3">
+            <button class="btn btn-primary mr-2" id="all">All</button>
+            <button class="btn btn-secondary mr-2" id="visited">Visted</button>
+            <button class="btn btn-info mr-2" id="visiting">Visting Soon</button>
+            <button class="btn btn-warning mr-2" id="remove">Remove</button>
+        </div>
+
+        <div class="row pb-3">
+            <form class="brewery-search form-inline">
+                <input class="form-control mr-2" id="search" name="brewery" type="text" />
+                <input class="btn btn-secondary mr-2" type="submit" value="Filter" />
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer bg-faded">
+        <div class="container-fluid p-3">
+            <span class="text-muted small">Michael J. Flynn</span>
+        </div>
+    </footer>
     <!--build:js js/main.min.js -->
+    <script src="../node_modules/jquery/dist/jquery.slim.js"></script>
+    <script src="../node_modules/tether/dist/js/tether.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="../node_modules/leaflet/dist/leaflet.js"></script>
     <script src="../node_modules/Leaflet.vector-markers/dist/leaflet-vector-markers.min.js"></script>
     <script src="./js/main.js"></script>
