@@ -1,0 +1,33 @@
+{
+  "name": "my-geo-beer-map",
+  "version": "1.0.0",
+  "description": "A simple web page to map out my brewery visits.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devNoiseConsulting/myGeoBeerMap.git"
+  },
+  "author": "Michael J. Flynn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devNoiseConsulting/myGeoBeerMap/issues"
+  },
+  "homepage": "https://github.com/devNoiseConsulting/myGeoBeerMap#readme",
+  "dependencies": {
+    "Leaflet.vector-markers": "0.0.6",
+    "bootstrap": "^4.0.0-alpha.6",
+    "font-awesome": "^4.7.0",
+    "leaflet": "^1.0.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-if": "^2.0.2",
+    "gulp-uglify": "^2.0.0",
+    "gulp-useref": "^3.1.2",
+    "uglify-js-harmony": "^2.6.2"
+  }
+}
