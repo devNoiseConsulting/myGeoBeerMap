@@ -5,12 +5,16 @@
     <meta charset="utf-8">
     <title>geoBeer Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles/leaflet-vector-markers.css">
+
     <style media="screen">
         #mapid {
             height: 360px;
         }
     </style>
     <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+    <script src="scripts/leaflet-vector-markers.min.js"></script>
+
 </head>
 
 <body>
@@ -34,12 +38,29 @@
                 geojsonFeatures = JSON.parse(data);
                 L.geoJSON(geojsonFeatures, {
                     style: function(feature) {
-                        return {
-                            color: feature.properties['marker-color']
-                        };
+                      return {
+                        color: feature.properties['marker-color']
+                      };
+                    },
+                    pointToLayer: function(feature, latlng) {
+                      let newRadius = 7;
+                      switch (feature.properties['marker-size']) {
+                        case 'large':
+                          newRadius = 13;
+                          break;
+                          case 'medium':
+                            newRadius = 10;
+                            break;
+                        default:
+                        newRadius = 7;
+                      }
+                      return new L.CircleMarker(latlng, {
+                        radius: newRadius,
+                        fillOpacity: 0.5
+                      });
                     },
                     onEachFeature: function(feature, layer) {
-                        layer.bindPopup(feature.properties.name);
+                      layer.bindPopup(`<strong><a href="${feature.properties.url}" target="_blank">${feature.properties.name}</a></strong><br/>${feature.properties.address}`);
                     }
                 }).addTo(mymap);
             });
