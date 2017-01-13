@@ -7,6 +7,7 @@ const allButton = document.querySelector('#all');
 const visitedButton = document.querySelector('#visited');
 const visitingButton = document.querySelector('#visiting');
 const filterForm = document.querySelector('.brewery-search');
+const clearButton = document.querySelector('#clear');
 
 L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2bm9pc2UiLCJhIjoiY2l4aThwOGVxMDAwODJ3cGo3dmt0MGcxeCJ9.UOpyx8-_bHDoyLPHfQ_Q4Q', {
   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -14,19 +15,6 @@ L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/
   id: 'your.mapbox.project.id',
   accessToken: 'your.mapbox.public.access.token'
 }).addTo(mymap);
-
-var url = 'https://raw.githubusercontent.com/devNoiseConsulting/geoBeer/master/myBreweryList.geojson';
-fetch(url)
-  .then(function(response) {
-    return response.text();
-  })
-  .then(function(data) {
-    geojsonFeaturesCollection = JSON.parse(data);
-
-    geoLayer = addFeaturesToLayer(geojsonFeaturesCollection);
-    geoLayer.addTo(mymap);
-    console.log(geojsonFeaturesCollection);
-  });
 
 function addFeaturesToLayer(featuresCollection) {
   newLayer = L.geoJSON(featuresCollection, {
@@ -82,8 +70,53 @@ function filterBreweries(e) {
   mymap.addLayer(geoLayer);
 }
 
+
 removeButton.addEventListener('click', removeBreweries);
 allButton.addEventListener('click', addBreweries.bind(null, false));
 visitedButton.addEventListener('click', addBreweries.bind(null, 'large'));
 visitingButton.addEventListener('click', addBreweries.bind(null, 'medium'));
 filterForm.addEventListener('submit', filterBreweries);
+clearButton.addEventListener('click', addBreweries.bind(null, false));
+
+function makeRequest(url) {
+  httpRequest = new XMLHttpRequest();
+
+  if (!httpRequest) {
+    alert('Giving up :( Cannot create an XMLHTTP instance');
+    return false;
+  }
+  httpRequest.onreadystatechange = requestChange;
+  httpRequest.open('GET', url);
+  httpRequest.send();
+}
+
+function requestChange() {
+  if (httpRequest.readyState === XMLHttpRequest.DONE) {
+    if (httpRequest.status === 200) {
+      addPointsToMap(httpRequest.responseText);
+    } else {
+      alert('There was a problem with the request.');
+    }
+  }
+}
+
+function addPointsToMap(points) {
+  geojsonFeaturesCollection = JSON.parse(points);
+
+  geoLayer = addFeaturesToLayer(geojsonFeaturesCollection);
+  geoLayer.addTo(mymap);
+  console.log(geojsonFeaturesCollection);
+}
+
+var url = 'https://raw.githubusercontent.com/devNoiseConsulting/geoBeer/master/myBreweryList.geojson';
+if (self.fetch) {
+  fetch(url)
+    .then(function(response) {
+      return response.text();
+    })
+    .then(function(data) {
+      addPointsToMap(data);
+    });
+} else {
+  makeRequest(url);
+}
