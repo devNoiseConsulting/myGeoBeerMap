@@ -1,7 +1,9 @@
-let mymap = L.map('mapid').setView([39.9525840, -75.1652220], 8);
+let mymap = L.map('mapid').setView([39.9525840, -75.1652220], 9);
+
 let geojsonFeaturesCollection;
 let geoLayer;
 
+const homeButton = document.querySelector('#home');
 const removeButton = document.querySelector('#remove');
 const allButton = document.querySelector('#all');
 const visitedButton = document.querySelector('#visited');
@@ -11,10 +13,14 @@ const clearButton = document.querySelector('#clear');
 
 L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2bm9pc2UiLCJhIjoiY2l4aThwOGVxMDAwODJ3cGo3dmt0MGcxeCJ9.UOpyx8-_bHDoyLPHfQ_Q4Q', {
   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-  maxZoom: 18,
+  maxZoom: 16,
   id: 'your.mapbox.project.id',
   accessToken: 'your.mapbox.public.access.token'
 }).addTo(mymap);
+
+function resetMap() {
+  mymap.setView([39.9525840, -75.1652220], 9);
+}
 
 function addFeaturesToLayer(featuresCollection) {
   newLayer = L.geoJSON(featuresCollection, {
@@ -36,7 +42,10 @@ function addFeaturesToLayer(featuresCollection) {
     }
   });
 
-  return newLayer;
+  var markers = L.markerClusterGroup();
+  markers.addLayer(newLayer);
+
+  return markers;
 }
 
 function removeBreweries() {
@@ -71,6 +80,7 @@ function filterBreweries(e) {
 }
 
 
+homeButton.addEventListener('click', resetMap);
 removeButton.addEventListener('click', removeBreweries);
 allButton.addEventListener('click', addBreweries.bind(null, false));
 visitedButton.addEventListener('click', addBreweries.bind(null, 'large'));
@@ -108,7 +118,7 @@ function addPointsToMap(points) {
   console.log(geojsonFeaturesCollection);
 }
 
-var url = 'https://raw.githubusercontent.com/devNoiseConsulting/geoBeer/master/myBreweryList.geojson';
+var url = './myBreweryList.geojson';
 if (self.fetch) {
   fetch(url)
     .then(function(response) {
