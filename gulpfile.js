@@ -20,9 +20,16 @@ gulp.task('fonts', function() {
     .pipe(gulp.dest('dist/fonts/'));
 });
 
+gulp.task('images', function() {
+  return gulp.src([
+      'app/images/**'
+    ])
+    .pipe(gulp.dest('dist/images/'));
+});
+
 gulp.task('data', function() {
   return gulp.src([
-      'app/*.geojson'
+      'app/*json'
     ])
     .pipe(gulp.dest('dist/'));
 });
