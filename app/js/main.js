@@ -31,7 +31,7 @@ function addFeaturesToLayer(featuresCollection) {
       }
       var newMarker = L.VectorMarkers.icon({
         icon: breweryIcon,
-        markerColor: feature.properties['marker-color']
+        markerColor: remapColor(feature.properties['marker-color'])
       });
       return new L.marker(latlng, {
         icon: newMarker
@@ -46,6 +46,17 @@ function addFeaturesToLayer(featuresCollection) {
   markers.addLayer(newLayer);
 
   return markers;
+}
+
+function remapColor(color) {
+  switch (color) {
+    case '#0047AB':
+      return '#0047AB';
+    case '#009688':
+      return '#00A882';
+    default:
+      return '#FFCA00';
+  }
 }
 
 function removeBreweries() {
