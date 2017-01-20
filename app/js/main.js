@@ -25,12 +25,8 @@ function resetMap() {
 function addFeaturesToLayer(featuresCollection) {
   newLayer = L.geoJSON(featuresCollection, {
     pointToLayer: function(feature, latlng) {
-      let breweryIcon = 'beer';
-      if (feature.properties['marker-symbol'] == 'restaurant') {
-        breweryIcon = 'cutlery';
-      }
       var newMarker = L.VectorMarkers.icon({
-        icon: breweryIcon,
+        icon: remapIcon(feature.properties['marker-symbol']),
         markerColor: remapColor(feature.properties['marker-color'])
       });
       return new L.marker(latlng, {
@@ -54,8 +50,23 @@ function remapColor(color) {
       return '#0047AB';
     case '#009688':
       return '#00A882';
-    default:
+    case '#607D8B':
       return '#FFCA00';
+    case '#FF8C00':
+      return '#FF9F00';
+    default:
+      return color;
+  }
+}
+
+function remapIcon(icon) {
+  switch (icon) {
+    case 'restaurant':
+      return 'cutlery';
+    case 'cross':
+      return 'times';
+    default:
+      return icon;
   }
 }
 

@@ -27,6 +27,20 @@ gulp.task('images', function() {
     .pipe(gulp.dest('dist/images/'));
 });
 
+gulp.task('favicon', function() {
+  return gulp.src([
+      'app/favicon.ico'
+    ])
+    .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('graphics', ['favicon', 'images']);
+
+gulp.task('getList', function() {
+  return download(url)
+  	.pipe(gulp.dest("app/"));
+});
+
 gulp.task('data', function() {
   return gulp.src([
       'app/*json'
@@ -38,9 +52,4 @@ gulp.task('clean:dist', function() {
   return del.sync('dist');
 });
 
-gulp.task('getList', function() {
-  return download(url)
-  	.pipe(gulp.dest("app/"));
-});
-
-gulp.task('build', ['clean:dist', 'getList', 'data', 'fonts', 'useref']);
+gulp.task('build', ['clean:dist', 'getList', 'graphics', 'data', 'fonts', 'useref']);
