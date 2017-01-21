@@ -9,7 +9,7 @@ const allButton = document.querySelector('#all');
 const visitedButton = document.querySelector('#visited');
 const visitingButton = document.querySelector('#visiting');
 const filterForm = document.querySelector('.brewery-search');
-const clearButton = document.querySelector('#clear');
+const filterButton = document.querySelector('#filter');
 
 L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2bm9pc2UiLCJhIjoiY2l4aThwOGVxMDAwODJ3cGo3dmt0MGcxeCJ9.UOpyx8-_bHDoyLPHfQ_Q4Q', {
   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -76,6 +76,8 @@ function removeBreweries() {
 
 function addBreweries(filter = false) {
   removeBreweries();
+  filterForm.reset();
+
   if (filter) {
     // Want to retain brewery data so making a quick clone for filtering
     let newGeoJSON = JSON.parse(JSON.stringify(geojsonFeaturesCollection));
@@ -88,10 +90,12 @@ function addBreweries(filter = false) {
 }
 
 function filterBreweries(e) {
-  e.preventDefault();
+  if (e) {
+    e.preventDefault();
+  }
   removeBreweries();
 
-  const search = this.querySelector('[name=brewery]').value.toLowerCase();
+  const search = filterForm.querySelector('[name=brewery]').value.toLowerCase();
   console.log(search);
 
   let newGeoJSON = JSON.parse(JSON.stringify(geojsonFeaturesCollection));
@@ -108,7 +112,9 @@ allButton.addEventListener('click', addBreweries.bind(null, false));
 visitedButton.addEventListener('click', addBreweries.bind(null, 'large'));
 visitingButton.addEventListener('click', addBreweries.bind(null, 'medium'));
 filterForm.addEventListener('submit', filterBreweries);
-clearButton.addEventListener('click', addBreweries.bind(null, false));
+filterButton.addEventListener('click', filterBreweries);
+
+console.log(allButton);
 
 function makeRequest(url) {
   httpRequest = new XMLHttpRequest();

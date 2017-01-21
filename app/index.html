@@ -58,19 +58,24 @@
 
     <div id="mapid" class="container-fluid"></div>
 
-    <div class="container pt-3">
-        <div class="row">
-            <div class="col-12 col-lg-6">
-                <button class="btn btn-primary mr-2 mb-3" id="all">All</button>
-                <button class="btn btn-secondary mr-2 mb-3" id="visited">Visted</button>
-                <button class="btn btn-info mr-2 mb-3" id="visiting">Visting Soon</button>
-                <button class="btn btn-warning mr-2 mb-3" id="remove">Remove</button>
+    <div class="container py-3">
+        <div class="row clearfix">
+            <div class="col-12 col-lg-6 pb-3">
+                <button type="button" class="btn btn-primary" id="all">All</button>
+                <button type="button" class="btn btn-secondary" id="visited">Visited</button>
+                <button type="button" class="btn btn-info" id="visiting">Visiting Soon</button>
+                <button type="button" class="btn btn-warning" id="remove">Remove</button>
             </div>
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-6 pb-3">
                 <form class="brewery-search form-inline">
-                    <input class="form-control mr-2 mb-3" id="search" name="brewery" type="text" />
-                    <input class="btn btn-secondary mr-2 mb-3" type="submit" value="Filter" />
-                    <input class="btn btn-secondary mr-2 mb-3" type="reset" id="clear" value="Clear" />
+                    <div class="input-group">
+                        <input class="form-control" id="search" name="brewery" type="text" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary" id="filter">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
                 </form>
             </div>
         </div>
