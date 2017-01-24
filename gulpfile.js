@@ -3,8 +3,7 @@ var useref = require('gulp-useref');
 var gulpIf = require('gulp-if');
 var del = require('del');
 var download = require("gulp-download");
-
-var url = 'https://raw.githubusercontent.com/devNoiseConsulting/geoBeer/master/myBreweryList.geojson';
+var exec = require('child_process').exec;
 
 gulp.task('useref', function() {
   return gulp.src('app/*.html')
@@ -36,9 +35,12 @@ gulp.task('favicon', function() {
 
 gulp.task('graphics', ['favicon', 'images']);
 
-gulp.task('getList', function() {
-  return download(url)
-  	.pipe(gulp.dest("app/"));
+gulp.task('make-list', function(cb) {
+  exec('node ./bin/myBreweries.js ./data/geobeer.json ./node_modules/geobeer/breweries/ ./app/myBreweryList.geojson', function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    cb(err);
+  });
 });
 
 gulp.task('data', function() {
@@ -52,4 +54,4 @@ gulp.task('clean:dist', function() {
   return del.sync('dist');
 });
 
-gulp.task('build', ['clean:dist', 'getList', 'graphics', 'data', 'fonts', 'useref']);
+gulp.task('build', ['clean:dist', 'make-list', 'graphics', 'data', 'fonts', 'useref']);
