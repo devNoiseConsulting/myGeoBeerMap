@@ -11,6 +11,9 @@ const visitingButton = document.querySelector('#visiting');
 const filterForm = document.querySelector('.brewery-search');
 const filterButton = document.querySelector('#filter');
 
+const nearMeButton = document.querySelector('#nearme');
+
+
 L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGV2bm9pc2UiLCJhIjoiY2l4aThwOGVxMDAwODJ3cGo3dmt0MGcxeCJ9.UOpyx8-_bHDoyLPHfQ_Q4Q', {
   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
   maxZoom: 16,
@@ -114,6 +117,8 @@ visitingButton.addEventListener('click', addBreweries.bind(null, 'medium'));
 filterForm.addEventListener('submit', filterBreweries);
 filterButton.addEventListener('click', filterBreweries);
 
+nearMeButton.addEventListener('click', showNearMe);
+
 console.log(allButton);
 
 function makeRequest(url) {
@@ -157,4 +162,53 @@ if (self.fetch) {
     });
 } else {
   makeRequest(url);
+}
+
+const radii = [
+  8047,
+  16094,
+  40234
+];
+let currentRadiusIndex = 0;
+let filterCircle;
+let userPosition;
+
+
+function showNearMe() {
+  if (filterCircle) {
+    mymap.removeLayer(filterCircle);
+  }
+
+  if (!userPosition) {
+    navigator.geolocation.watchPosition(showPosition);
+  } else {
+    currentRadiusIndex++;
+    console.log("showNearMe " + currentRadiusIndex);
+
+    if (radii.length === currentRadiusIndex) {
+      mymap.removeLayer(filterCircle);
+      currentRadiusIndex = -1;
+    } else {
+      placeMyPosition();
+    }
+  }
+}
+
+function showPosition(position) {
+  userPosition = {};
+  console.log(position.coords.latitude);
+  console.log(position.coords.longitude);
+    userPosition.lat = position.coords.latitude;
+    userPosition.long = position.coords.longitude;
+    placeMyPosition();
+}
+
+function placeMyPosition() {
+  filterCircle = L.circle(L.latLng(userPosition.lat, userPosition.long), radii[currentRadiusIndex], {
+    opacity: 1,
+    weight: 1,
+    fillOpacity: 0.4,
+    color: '#0047AB'
+  }).addTo(mymap);
+
 }
