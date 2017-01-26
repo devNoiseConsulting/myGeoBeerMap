@@ -6,6 +6,7 @@ let geoLayer;
 const homeButton = document.querySelector('#home');
 const removeButton = document.querySelector('#remove');
 const allButton = document.querySelector('#all');
+const toVisitButton = document.querySelector('#visit');
 const visitedButton = document.querySelector('#visited');
 const visitingButton = document.querySelector('#visiting');
 const filterForm = document.querySelector('.brewery-search');
@@ -112,6 +113,7 @@ function filterBreweries(e) {
 homeButton.addEventListener('click', resetMap);
 removeButton.addEventListener('click', removeBreweries);
 allButton.addEventListener('click', addBreweries.bind(null, false));
+toVisitButton.addEventListener('click', addBreweries.bind(null, 'small'));
 visitedButton.addEventListener('click', addBreweries.bind(null, 'large'));
 visitingButton.addEventListener('click', addBreweries.bind(null, 'medium'));
 filterForm.addEventListener('submit', filterBreweries);
@@ -148,7 +150,6 @@ function addPointsToMap(points) {
 
   geoLayer = addFeaturesToLayer(geojsonFeaturesCollection);
   geoLayer.addTo(mymap);
-  console.log(geojsonFeaturesCollection);
 }
 
 var url = './myBreweryList.geojson';
@@ -175,15 +176,10 @@ let userPosition;
 
 
 function showNearMe() {
-  if (filterCircle) {
-    mymap.removeLayer(filterCircle);
-  }
-
   if (!userPosition) {
     navigator.geolocation.watchPosition(showPosition);
   } else {
     currentRadiusIndex++;
-    console.log("showNearMe " + currentRadiusIndex);
 
     if (radii.length === currentRadiusIndex) {
       mymap.removeLayer(filterCircle);
@@ -196,19 +192,21 @@ function showNearMe() {
 
 function showPosition(position) {
   userPosition = {};
-  console.log(position.coords.latitude);
-  console.log(position.coords.longitude);
-    userPosition.lat = position.coords.latitude;
-    userPosition.long = position.coords.longitude;
-    placeMyPosition();
+  userPosition.lat = position.coords.latitude;
+  userPosition.long = position.coords.longitude;
+  placeMyPosition();
 }
 
 function placeMyPosition() {
+  if (filterCircle) {
+    mymap.removeLayer(filterCircle);
+  }
+
   filterCircle = L.circle(L.latLng(userPosition.lat, userPosition.long), radii[currentRadiusIndex], {
     opacity: 1,
     weight: 1,
-    fillOpacity: 0.4,
+    fillOpacity: 0.25,
     color: '#0047AB'
   }).addTo(mymap);
-
+  mymap.panTo(L.latLng(userPosition.lat, userPosition.long));
 }
