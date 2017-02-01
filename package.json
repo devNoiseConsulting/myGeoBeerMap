@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "breweries": "node ./bin/myBreweries.js ./data/geobeer.json ./node_modules/geobeer/breweries/ ./app/myBreweryList.geojson"
+    "breweries": "node ./bin/myBreweries.js ./data/geobeer.json ./node_modules/geobeer/breweries/ ./app/myBreweryList.geojson",
+    "refresh": "rm -rf ./node_modules/geobeer/; npm install"
   },
   "repository": {
     "type": "git",

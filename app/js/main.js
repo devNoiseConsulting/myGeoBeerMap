@@ -107,8 +107,8 @@ function filterBreweries(e) {
   geoLayer = addFeaturesToLayer(newGeoJSON);
 
   mymap.addLayer(geoLayer);
+  mymap.fitBounds(getFeatureBounds(newGeoJSON.features));
 }
-
 
 homeButton.addEventListener('click', resetMap);
 removeButton.addEventListener('click', removeBreweries);
@@ -209,4 +209,50 @@ function placeMyPosition() {
     color: '#0047AB'
   }).addTo(mymap);
   mymap.panTo(L.latLng(userPosition.lat, userPosition.long));
+}
+
+function getFeatureBounds(features) {
+  // Originally I just figured out the center point base on all the feature points.
+  // const newLat = features.reduce(reduceSumLat, 0) / features.length;
+  // const newLng = features.reduce(reduceSumLng, 0) / features.length;
+  //mymap.setView([newLat, newLng], 9);
+
+  const minLat = features.reduce(reduceMinLat, features[0].geometry.coordinates[1]);
+  const maxLat = features.reduce(reduceMaxLat, features[0].geometry.coordinates[1]);
+  const minLng = features.reduce(reduceMinLng, features[0].geometry.coordinates[0]);
+  const maxLng = features.reduce(reduceMaxLng, features[0].geometry.coordinates[0]);
+
+  // Figuring out buffer
+  const latBuffer = (maxLat - minLat) * 0.1;
+  const lngBuffer = (maxLng - minLng) * 0.1;
+
+  // Turns out we just need a buffer at the top so markers will be visible.
+  return [
+    [minLat, minLng],
+    [maxLat + latBuffer, maxLng]
+  ];
+}
+
+function reduceSumLat(a, b) {
+  return a + b.geometry.coordinates[1];
+}
+
+function reduceSumLng(a, b) {
+  return a + b.geometry.coordinates[0];
+}
+
+function reduceMinLat(a, b) {
+  return (a < b.geometry.coordinates[1]) ? a : b.geometry.coordinates[1];
+}
+
+function reduceMaxLat(a, b) {
+  return (a > b.geometry.coordinates[1]) ? a : b.geometry.coordinates[1];
+}
+
+function reduceMinLng(a, b) {
+  return (a < b.geometry.coordinates[1]) ? a : b.geometry.coordinates[0];
+}
+
+function reduceMaxLng(a, b) {
+  return (a > b.geometry.coordinates[1]) ? a : b.geometry.coordinates[0];
 }
