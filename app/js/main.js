@@ -100,7 +100,6 @@ function filterBreweries(e) {
   removeBreweries();
 
   const search = filterForm.querySelector('[name=brewery]').value.toLowerCase();
-  console.log(search);
 
   let newGeoJSON = JSON.parse(JSON.stringify(geojsonFeaturesCollection));
   newGeoJSON.features = newGeoJSON.features.filter(feature => (feature.properties.name.toLowerCase().includes(search)));
@@ -120,8 +119,6 @@ filterForm.addEventListener('submit', filterBreweries);
 filterButton.addEventListener('click', filterBreweries);
 
 nearMeButton.addEventListener('click', showNearMe);
-
-console.log(allButton);
 
 function makeRequest(url) {
   httpRequest = new XMLHttpRequest();
@@ -208,7 +205,24 @@ function placeMyPosition() {
     fillOpacity: 0.25,
     color: '#0047AB'
   }).addTo(mymap);
-  mymap.panTo(L.latLng(userPosition.lat, userPosition.long));
+  mymap.fitBounds(getBoundsForCirle(userPosition, radii[currentRadiusIndex]));
+}
+
+function getBoundsForCirle(position, radius) {
+  //Earth’s radius, sphere
+  const R = 6378137;
+
+  //Coordinate offsets in radians
+  const dLat = radius /R;
+  const dlng = radius / (R * Math.cos(Math.PI * position.lat / 180));
+
+  //OffsetPosition, decimal degrees
+  const minLat = position.lat - dLat * 180 / Math.PI;
+  const minLng = position.long - dlng * 180 / Math.PI;
+  const maxLat = position.lat + dLat * 180 / Math.PI;
+  const maxLng = position.long + dlng * 180 / Math.PI;
+
+  return [ [minLat, minLng], [maxLat, maxLng] ];
 }
 
 function getFeatureBounds(features) {
@@ -227,10 +241,7 @@ function getFeatureBounds(features) {
   const lngBuffer = (maxLng - minLng) * 0.1;
 
   // Turns out we just need a buffer at the top so markers will be visible.
-  return [
-    [minLat, minLng],
-    [maxLat + latBuffer, maxLng]
-  ];
+  return [ [minLat, minLng], [maxLat + latBuffer, maxLng] ];
 }
 
 function reduceSumLat(a, b) {
