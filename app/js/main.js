@@ -105,8 +105,12 @@ function filterBreweries(e) {
   newGeoJSON.features = newGeoJSON.features.filter(feature => (feature.properties.name.toLowerCase().includes(search)));
   geoLayer = addFeaturesToLayer(newGeoJSON);
 
-  mymap.addLayer(geoLayer);
-  mymap.fitBounds(getFeatureBounds(newGeoJSON.features));
+  if (newGeoJSON.features.length > 0) {
+    mymap.addLayer(geoLayer);
+    mymap.fitBounds(getFeatureBounds(newGeoJSON.features));
+  } else {
+    resetMap();
+  }
 }
 
 homeButton.addEventListener('click', resetMap);
@@ -198,14 +202,15 @@ function placeMyPosition() {
   if (filterCircle) {
     mymap.removeLayer(filterCircle);
   }
-
-  filterCircle = L.circle(L.latLng(userPosition.lat, userPosition.long), radii[currentRadiusIndex], {
-    opacity: 1,
-    weight: 1,
-    fillOpacity: 0.25,
-    color: '#0047AB'
-  }).addTo(mymap);
-  mymap.fitBounds(getBoundsForCirle(userPosition, radii[currentRadiusIndex]));
+  if (currentRadiusIndex != -1) {
+    filterCircle = L.circle(L.latLng(userPosition.lat, userPosition.long), radii[currentRadiusIndex], {
+      opacity: 1,
+      weight: 1,
+      fillOpacity: 0.25,
+      color: '#0047AB'
+    }).addTo(mymap);
+    mymap.fitBounds(getBoundsForCirle(userPosition, radii[currentRadiusIndex]));
+  }
 }
 
 function getBoundsForCirle(position, radius) {
@@ -213,7 +218,7 @@ function getBoundsForCirle(position, radius) {
   const R = 6378137;
 
   //Coordinate offsets in radians
-  const dLat = radius /R;
+  const dLat = radius / R;
   const dlng = radius / (R * Math.cos(Math.PI * position.lat / 180));
 
   //OffsetPosition, decimal degrees
@@ -222,7 +227,10 @@ function getBoundsForCirle(position, radius) {
   const maxLat = position.lat + dLat * 180 / Math.PI;
   const maxLng = position.long + dlng * 180 / Math.PI;
 
-  return [ [minLat, minLng], [maxLat, maxLng] ];
+  return [
+    [minLat, minLng],
+    [maxLat, maxLng]
+  ];
 }
 
 function getFeatureBounds(features) {
@@ -241,7 +249,10 @@ function getFeatureBounds(features) {
   const lngBuffer = (maxLng - minLng) * 0.1;
 
   // Turns out we just need a buffer at the top so markers will be visible.
-  return [ [minLat, minLng], [maxLat + latBuffer, maxLng] ];
+  return [
+    [minLat, minLng],
+    [maxLat + latBuffer, maxLng]
+  ];
 }
 
 function reduceSumLat(a, b) {

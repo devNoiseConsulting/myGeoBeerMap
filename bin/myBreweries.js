@@ -90,6 +90,7 @@ function mergeAll(dirName) {
       if (visitData) {
         brewery.features.forEach(function(item) {
           if (visitData[item.properties.geoBeerId]) {
+            //console.log(item.properties.geoBeerId,item.properties.name,visitData[item.properties.geoBeerId]);
             switch (visitData[item.properties.geoBeerId]) {
               case 'tour':
                 item.properties['marker-color'] = '#009688';
