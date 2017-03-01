@@ -35,8 +35,16 @@ gulp.task('favicon', function() {
 
 gulp.task('graphics', ['favicon', 'images']);
 
-gulp.task('make-list', function(cb) {
+gulp.task('make-big-list', function(cb) {
   exec('node ./bin/myBreweries.js ./data/geobeer.json ./node_modules/geobeer/breweries/ ./app/myBreweryList.geojson', function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    cb(err);
+  });
+});
+
+gulp.task('make-my-list', function(cb) {
+  exec('node ./bin/myBreweries.js ./data/geobeer.json ./node_modules/geobeer/breweries/ ./app/myBreweryList.geojson mine', function(err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     cb(err);
@@ -54,4 +62,6 @@ gulp.task('clean:dist', function() {
   return del.sync('dist');
 });
 
-gulp.task('build', ['clean:dist', 'make-list', 'graphics', 'data', 'fonts', 'useref']);
+gulp.task('build', ['clean:dist', 'make-big-list', 'graphics', 'data', 'fonts', 'useref']);
+
+gulp.task('my-breweries', ['make-my-list', 'data']);

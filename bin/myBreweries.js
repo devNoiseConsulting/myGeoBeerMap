@@ -3,6 +3,7 @@ let fs = require('fs');
 const visitFile = process.argv[2];
 const dirName = process.argv[3];
 const outputFile = process.argv[4];
+const onlyMybreweries = process.argv[5] ? true : false;
 
 let myBreweries = {};
 let visitData;
@@ -86,10 +87,12 @@ function mergeAll(dirName) {
 
     function addBrewery(fileName) {
       const brewery = readBrewery(dirName + "/" + fileName);
+      let includeBrewery = !onlyMybreweries;
 
       if (visitData) {
         brewery.features.forEach(function(item) {
           if (visitData[item.properties.geoBeerId]) {
+            includeBrewery = true;
             //console.log(item.properties.geoBeerId,item.properties.name,visitData[item.properties.geoBeerId]);
             switch (visitData[item.properties.geoBeerId]) {
               case 'tour':
@@ -102,7 +105,9 @@ function mergeAll(dirName) {
                 break;
             }
           }
-          breweries.push(item);
+          if (includeBrewery) {
+            breweries.push(item);
+          }
         });
       } else {
         console.log("Visit data not initialized");
