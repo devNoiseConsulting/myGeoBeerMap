@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "breweries": "node ./bin/myBreweries.js ./data/geobeer.json ./node_modules/geobeer/breweries/ ./app/myBreweryList.geojson",
     "refresh": "rm -rf ./node_modules/geobeer/; npm install",
-    "start": "cd ./dist; live-server"
+    "start": "cd ./dist; live-server",
+    "build": "npm run breweries; gulp build",
+    "fullbuild": "npm run refresh; npm run breweries; gulp build"
   },
   "repository": {
     "type": "git",

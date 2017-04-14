@@ -42,4 +42,5 @@ tmp
 # dist dir
 dist
 
+.env
 myBreweryList.geojson

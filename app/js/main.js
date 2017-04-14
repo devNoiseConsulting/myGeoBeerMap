@@ -27,6 +27,8 @@ function resetMap() {
 }
 
 function addFeaturesToLayer(featuresCollection) {
+  var popup = (featuresCollection.length == 1) ? true : false;
+
   newLayer = L.geoJSON(featuresCollection, {
     pointToLayer: function(feature, latlng) {
       var newMarker = L.VectorMarkers.icon({
@@ -41,6 +43,12 @@ function addFeaturesToLayer(featuresCollection) {
       layer.bindPopup(`<strong><a href="${feature.properties.url}" target="_blank">${feature.properties.name}</a></strong><br/>${feature.properties.address}`);
     }
   });
+  if (popup) {
+    geoJsonLayer.eachLayer(function(layer) {
+      var popUp = layer._popup;
+      popUp.openPopup();
+    });
+  }
 
   var markers = L.markerClusterGroup();
   markers.addLayer(newLayer);
@@ -272,9 +280,9 @@ function reduceMaxLat(a, b) {
 }
 
 function reduceMinLng(a, b) {
-  return (a < b.geometry.coordinates[1]) ? a : b.geometry.coordinates[0];
+  return (a < b.geometry.coordinates[0]) ? a : b.geometry.coordinates[0];
 }
 
 function reduceMaxLng(a, b) {
-  return (a > b.geometry.coordinates[1]) ? a : b.geometry.coordinates[0];
+  return (a > b.geometry.coordinates[0]) ? a : b.geometry.coordinates[0];
 }
