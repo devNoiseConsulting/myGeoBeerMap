@@ -1,4 +1,5 @@
-let fs = require('fs');
+const fs = require('fs');
+const path = require('path');
 
 const visitFile = process.argv[2];
 const dirName = process.argv[3];
@@ -12,15 +13,11 @@ if (dirName && visitFile && outputFile) {
   visitData = readJSONFile(visitFile);
   mergeAll(dirName);
 } else {
-  const node = getFileName(process.argv[0]);
+  const node = path.basename(process.argv[0]);
 
-  const script = getFileName(process.argv[1]);
+  const script = path.basename(process.argv[1]);
 
   console.log("Usage: " + node + " " + script + " <dirname>");
-}
-
-function getFileName(path) {
-  return path.substring(path.lastIndexOf('/') + 1, path.length);
 }
 
 function isGeoJsonFile(file) {
@@ -28,6 +25,8 @@ function isGeoJsonFile(file) {
 }
 
 function caseInsensitiveSort(a, b) {
+  a = path.basename(a);
+  b = path.basename(b);
   if (a.toLowerCase() < b.toLowerCase()) return -1;
   if (a.toLowerCase() > b.toLowerCase()) return 1;
   return 0;
@@ -70,23 +69,32 @@ function writeBreweryMerge(fileName, breweries) {
   out.end(); // currently the same as destroy() and destroySoon()
 }
 
+function fileWalkSync(dir, filelist) {
+  var files = fs.readdirSync(dir);
+  files.forEach(function(file) {
+    let filePath = path.join(dir, file);
+    if (fs.statSync(filePath).isDirectory()) {
+      filelist = fileWalkSync(filePath, filelist);
+    } else {
+      filelist.push(filePath);
+    }
+  });
+  return filelist;
+}
+
 function mergeAll(dirName) {
   let breweries = [];
 
-  fs.readdir(dirName, processBreweries);
+  let files = fileWalkSync(dirName, []);
+  processBreweries(files);
 
-  function processBreweries(err, files) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-
+  function processBreweries(files) {
     files = files.filter(isGeoJsonFile);
     files.sort(caseInsensitiveSort);
     files.forEach(addBrewery);
 
     function addBrewery(fileName) {
-      const brewery = readBrewery(dirName + "/" + fileName);
+      const brewery = readBrewery(fileName);
       let includeBrewery = !onlyMybreweries;
 
       if (visitData) {
