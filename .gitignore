@@ -44,3 +44,6 @@ dist
 
 .env
 myBreweryList.geojson
+
+# Parcel.JS cache dir
+.cache
