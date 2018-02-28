@@ -24,7 +24,7 @@
   "homepage": "https://github.com/devNoiseConsulting/myGeoBeerMap#readme",
   "dependencies": {
     "Leaflet.vector-markers": "0.0.6",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.0.0-beta.2",
     "font-awesome": "^4.7.0",
     "geobeer": "github:devNoiseConsulting/geoBeer",
     "jquery": "^3.3.1",

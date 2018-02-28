@@ -160,13 +160,16 @@ function addPointsToMap(points) {
   geoLayer.addTo(mymap);
 }
 
-var url = './myBreweryList.geojson';
+// Stupid hack.
+var url = 'https://breweries.flynnmj.org/myBreweryList.geojson';
 if (self.fetch) {
-  fetch(url)
+  fetch(url, { mode: 'no-cors', cache: 'no-cache' })
     .then(function(response) {
-      return response.text();
+      console.log('debug:', response);
+      return response.json();
     })
     .then(function(data) {
+      console.log('debug2:', data);
       addPointsToMap(data);
     });
 } else {
