@@ -39,12 +39,11 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-faded">
+  <!-- <nav class="navbar navbar-expand-lg navbar-light bg-faded">
     <a class="navbar-brand" href="#">myGeoBeerMap</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
-
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="nav navbar-nav">
@@ -56,7 +55,7 @@
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filters</a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li class="dropdown-item" id="all">All</li>
             <li class="dropdown-item" id="visit">To Visit</li>
             <li class="dropdown-item" id="visited">Visited</li>
@@ -65,13 +64,61 @@
             <li class="dropdown-item" id="remove">Remove</li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/devNoiseConsulting/myGeoBeerMap">GitHub Repo</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/devNoiseConsulting/geoBeer">geoBeer Repo</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Github</a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="https://github.com/devNoiseConsulting/myGeoBeerMap">myGeoBeerMap Repo</a>
+            <a class="dropdown-item" href="https://github.com/devNoiseConsulting/geoBeer">geoBeer Repo</a>
+          </div>
         </li>
       </ul>
+    </div>
+  </nav> -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="#">myGeoBeerMap</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="nearme" href="#">Near Me</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="filterDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Filters
+          </a>
+          <div class="dropdown-menu" aria-labelledby="filterDropdown">
+            <a class="dropdown-item" href="#" id="all">All</a>
+            <a class="dropdown-item" href="#" id="visit">To Visit</a>
+            <a class="dropdown-item" href="#" id="visited">Visited</a>
+            <a class="dropdown-item" href="#" id="visiting">Visiting Soon</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" id="remove">Remove</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="gitHubDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-github-square"></i>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="gitHubDropdown">
+            <a class="dropdown-item" href="https://github.com/devNoiseConsulting/myGeoBeerMap">myGeoBeerMap Repo</a>
+            <a class="dropdown-item" href="https://github.com/devNoiseConsulting/geoBeer">geoBeer Repo</a>
+          </div>
+        </li>
+      </ul>
+      <form class="brewery-search form-inline">
+        <div class="input-group">
+          <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="search" name="brewery" type="text">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
     </div>
   </nav>
 
